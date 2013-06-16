@@ -34,29 +34,89 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_alignParentLeft="true"
-        android:layout_below="@+id/spnImageType"
+        android:layout_below="@+id/etSiteFilter"
+        android:paddingTop="10dp"
         android:numColumns="3" >
     </GridView>
 
-    <Spinner
-        android:id="@+id/spnImageSize"
+     <TextView
+        android:id="@+id/tvImageSize"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_alignLeft="@+id/gvResults"
-        android:layout_below="@+id/btnSearch" />
+        android:layout_alignParentLeft="true"
+        android:layout_below="@+id/btnSearch"
+        android:text="@string/image_size" />
+    
+    <TextView
+        android:id="@+id/tvColorFilter"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentLeft="true"
+        android:layout_alignTop="@+id/spnColorFilter"
+        android:layout_below="@+id/btnSearch"
+        android:text="@string/color_filter" />
     
     <Spinner
         android:id="@+id/spnColorFilter"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_alignLeft="@+id/gvResults"
-        android:layout_below="@+id/spnImageSize" />
+        android:layout_alignParentRight="true"
+        android:layout_toRightOf="@+id/tvColorFilter"
+        android:layout_below="@+id/spnImageSize"
+        android:entries="@array/color_filter_array" />
 
+    <TextView
+        android:id="@+id/tvImageType"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentLeft="true"
+        android:layout_alignTop="@+id/spnImageType"
+        android:layout_below="@+id/btnSearch"
+        android:text="@string/image_type" />
+    
     <Spinner
         android:id="@+id/spnImageType"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_alignLeft="@+id/gvResults"
-        android:layout_below="@+id/spnColorFilter" />
+        android:layout_alignParentRight="true"
+        android:layout_toRightOf="@+id/tvImageType"
+        android:layout_below="@+id/spnColorFilter"
+        android:entries="@array/image_type_array" />
+
+    <Spinner
+        android:id="@+id/spnImageSize"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentRight="true"
+        android:layout_toRightOf="@+id/tvImageSize"
+        android:layout_below="@+id/btnSearch"
+        android:entries="@array/image_size_array" />
+
+    <TextView
+        android:id="@+id/tvSiteFilter"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/spnImageType"
+        android:text="@string/site_filter" />
+
+    <EditText
+        android:id="@+id/etSiteFilter"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignBaseline="@+id/tvSiteFilter"
+        android:layout_alignBottom="@+id/tvSiteFilter"
+        android:layout_alignParentRight="true"
+        android:layout_toRightOf="@+id/tvSiteFilter"
+        android:hint="@string/site_filter_hint"
+        android:ems="10" />
+
+    <Button
+        android:id="@+id/btMore"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        android:layout_alignParentRight="true"
+        android:onClick="moreButtonClicked"
+        android:text="@string/more_button_text" />
     
 </RelativeLayout>
