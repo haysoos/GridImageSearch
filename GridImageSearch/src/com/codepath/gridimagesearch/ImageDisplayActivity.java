@@ -12,9 +12,9 @@ public class ImageDisplayActivity extends Activity {
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_image_display);
-		String url = getIntent().getStringExtra("url");
+		ImageResult imageResult = (ImageResult) getIntent().getExtras().get("image_result");
 		SmartImageView ivResult = (SmartImageView) this.findViewById(R.id.ivResult);
-		ivResult.setImageUrl(url);
+		ivResult.setImageUrl(imageResult.getFullUrl());
 	}
 
 	@Override

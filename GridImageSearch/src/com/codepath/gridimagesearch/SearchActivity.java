@@ -9,12 +9,12 @@ import org.json.JSONObject;
 
 import android.app.Activity;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.net.Uri;
 import android.os.Bundle;
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.util.Log;
-import android.view.KeyEvent;
 import android.view.Menu;
 import android.view.View;
 import android.widget.AdapterView;
@@ -40,6 +40,8 @@ public class SearchActivity extends Activity {
 	Spinner spnColorFilter;
 	Spinner spnImageType;
 	Button btnMore;
+	private SharedPreferences settings;
+	private SharedPreferences.Editor editor;
 	private int startIndex = 0;
 	private List<ImageResult> imageResults = new ArrayList<ImageResult>();
 	private ImageResultArrayAdapter imageAdapter;
@@ -47,6 +49,8 @@ public class SearchActivity extends Activity {
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
+		settings = getPreferences(0);
+		editor = settings.edit();
 		setContentView(R.layout.activity_search);
 		setupViews();
 	}
@@ -62,6 +66,12 @@ public class SearchActivity extends Activity {
 		btnMore = (Button) findViewById(R.id.btMore);
 		btnMore.setVisibility(View.INVISIBLE);
 		
+		etQuery.setText(settings.getString("etQuery", ""));
+		etSiteFilter.setText(settings.getString("etSiteFilter", ""));
+		spnImageSize.setSelection(settings.getInt("spnImageSize", 0));
+		spnColorFilter.setSelection(settings.getInt("spnColorFilter", 0));
+		spnImageType.setSelection(settings.getInt("spnImageType", 0));
+		
 		imageAdapter = new ImageResultArrayAdapter(this, imageResults);
 		gvResults.setAdapter(imageAdapter);
 		gvResults.setOnItemClickListener(new OnItemClickListener(){
@@ -71,17 +81,17 @@ public class SearchActivity extends Activity {
 					long rowId) {
 				Intent i = new Intent(getApplicationContext(), ImageDisplayActivity.class);
 				ImageResult imageResult = imageResults.get(position);
-				i.putExtra("url", imageResult.getFullUrl());
+				i.putExtra("image_result", imageResult);
 				startActivity(i);
 			}
 			
 		});
 		
-		spnImageSize.setOnItemSelectedListener(new SpinnerOnItemClickListener());
-		spnImageType.setOnItemSelectedListener(new SpinnerOnItemClickListener());
-		spnColorFilter.setOnItemSelectedListener(new SpinnerOnItemClickListener());
-		etQuery.addTextChangedListener(new EditTextChangedListener());
-		etSiteFilter.addTextChangedListener(new EditTextChangedListener());
+		spnImageSize.setOnItemSelectedListener(new SpinnerOnItemClickListener("spnImageType"));
+		spnImageType.setOnItemSelectedListener(new SpinnerOnItemClickListener("spnImageType"));
+		spnColorFilter.setOnItemSelectedListener(new SpinnerOnItemClickListener("spnColorFilter"));
+		etQuery.addTextChangedListener(new EditTextChangedListener("etQuery"));
+		etSiteFilter.addTextChangedListener(new EditTextChangedListener("etSiteFilter"));
 		
 	}
 	
@@ -91,11 +101,19 @@ public class SearchActivity extends Activity {
 	 */
 	class SpinnerOnItemClickListener implements OnItemSelectedListener {
 
+		private String spinnerName;
+		
+		public SpinnerOnItemClickListener(String spinnerName) {
+			this.spinnerName = spinnerName;
+		}
+
 		@Override
 		public void onItemSelected(AdapterView<?> adapter, View parent, int position,
 				long rowId) {
 			startIndex = 0;
 			btnMore.setVisibility(View.INVISIBLE);
+			editor.putInt(spinnerName, position);
+			editor.commit();
 		}
 
 		@Override
@@ -107,10 +125,18 @@ public class SearchActivity extends Activity {
 	
 	class EditTextChangedListener implements TextWatcher {
 
+		private String name;
+		
+		public EditTextChangedListener(String name) {
+			this.name = name;
+		}
+
 		@Override
 		public void afterTextChanged(Editable s) {
 			startIndex = 0;
-			btnMore.setVisibility(View.INVISIBLE);			
+			btnMore.setVisibility(View.INVISIBLE);
+			editor.putString(name, s.toString());
+			editor.commit();
 		}
 
 		@Override
